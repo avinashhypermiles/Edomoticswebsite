@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import {
   Phone, Mail, MapPin, Menu, X, Home, Tv, Shield, Lightbulb,
   Star, ArrowRight, Users, Award, Clock, Zap, Wifi, PlayCircle,
@@ -7,7 +6,74 @@ import {
   Thermometer, Lock, Music, Globe, MousePointer, Power,
   WifiIcon, Bluetooth, Radio
 } from 'lucide-react';
-import Footer from './FooterLink';
+
+// Your actual EmailJS credentials
+const EMAILJS_SERVICE_ID = 'service_qzrto3a';
+const EMAILJS_TEMPLATE_ID = 'template_73ulw4v';
+const EMAILJS_PUBLIC_KEY = 'djoXrPTL3rU1bxWiF';
+
+// Load EmailJS script dynamically
+const loadEmailJS = () => {
+  return new Promise((resolve, reject) => {
+    if (window.emailjs) {
+      resolve(window.emailjs);
+      return;
+    }
+    
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+    script.onload = () => {
+      window.emailjs.init(EMAILJS_PUBLIC_KEY);
+      resolve(window.emailjs);
+    };
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+};
+
+// Footer Component
+const Footer = () => {
+  return (
+    <footer className="bg-gray-900 text-white py-12">
+      <div className="container mx-auto px-4">
+        <div className="grid md:grid-cols-4 gap-8">
+          <div>
+            <h3 className="text-xl font-bold mb-4">CHINMUDRA INNOVATIONS</h3>
+            <p className="text-gray-400">Transforming homes with smart technology solutions across India.</p>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-4">Services</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li>Home Automation</li>
+              <li>Smart Security</li>
+              <li>Entertainment Systems</li>
+              <li>Climate Control</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-4">Contact</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li>+91 98765 43210</li>
+              <li>info@chinmudra.com</li>
+              <li>Hyderabad, India</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-4">Follow Us</h4>
+            <div className="flex space-x-4">
+              <div className="w-8 h-8 bg-green-600 rounded-full"></div>
+              <div className="w-8 h-8 bg-blue-600 rounded-full"></div>
+              <div className="w-8 h-8 bg-red-600 rounded-full"></div>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+          <p>&copy; 2025 Chinmudra Innovations. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  );
+};
 
 // Animated Background Component for Home Automation
 const HomeAutomationBackground = () => {
@@ -50,7 +116,6 @@ const HomeAutomationBackground = () => {
           }}
         >
           <div className="relative">
-            {/* Light bulb icon with glow effect */}
             <div 
               className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-1000 ${
                 animationPhase % 2 === 0 ? 'bg-yellow-400/80 shadow-lg shadow-yellow-400/50' : 'bg-gray-400/40'
@@ -63,7 +128,6 @@ const HomeAutomationBackground = () => {
               <Lightbulb className={`w-5 h-5 ${animationPhase % 2 === 0 ? 'text-yellow-900' : 'text-gray-600'}`} />
             </div>
             
-            {/* Light beam effect */}
             {animationPhase % 2 === 0 && (
               <div 
                 className="absolute top-full left-1/2 transform -translate-x-1/2 w-16 h-20 bg-gradient-to-b from-yellow-300/40 via-yellow-200/20 to-transparent rounded-b-full"
@@ -74,7 +138,6 @@ const HomeAutomationBackground = () => {
               ></div>
             )}
 
-            {/* WiFi signals for smart lights */}
             <div className="absolute -top-6 -right-6">
               <div 
                 className="w-6 h-6 text-green-400"
@@ -110,7 +173,6 @@ const HomeAutomationBackground = () => {
               {device.type === 'lock' && <Lock className="w-5 h-5 text-white" />}
             </div>
             
-            {/* Status indicator */}
             <div 
               className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${
                 animationPhase >= 1 ? 'bg-green-400' : 'bg-gray-400'
@@ -121,7 +183,6 @@ const HomeAutomationBackground = () => {
               }}
             ></div>
 
-            {/* Connection lines between devices */}
             {index < devicePositions.length - 1 && (
               <div 
                 className="absolute top-1/2 left-full w-20 h-px bg-gradient-to-r from-green-400/60 via-emerald-400/40 to-transparent"
@@ -144,7 +205,6 @@ const HomeAutomationBackground = () => {
           <Home className="w-8 h-8 text-white" />
         </div>
         
-        {/* Radiating circles for hub connectivity */}
         <div className="absolute inset-0 rounded-2xl border-2 border-blue-400/40" style={{ animation: `ripple 3s ease-out infinite` }}></div>
         <div className="absolute inset-0 rounded-2xl border-2 border-cyan-400/30" style={{ animation: `ripple 3s ease-out infinite 1s` }}></div>
         <div className="absolute inset-0 rounded-2xl border-2 border-emerald-400/20" style={{ animation: `ripple 3s ease-out infinite 2s` }}></div>
@@ -164,7 +224,6 @@ const HomeAutomationBackground = () => {
         ></div>
       ))}
 
-      {/* Custom CSS for animations */}
       <style jsx>{`
         @keyframes lightPulse {
           0%, 100% { opacity: 0.4; transform: scale(1); }
@@ -230,6 +289,19 @@ const ChinmudraWebsite = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isVisible, setIsVisible] = useState({});
+  
+  // Contact form state
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    city: '',
+    service: '',
+    details: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   // Auto-rotate testimonials
   useEffect(() => {
@@ -258,6 +330,88 @@ const ChinmudraWebsite = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  // Handle form input changes
+  const handleContactFormChange = (e) => {
+    const { name, value } = e.target;
+    setContactForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Handle form submission with EmailJS - Fixed with hardcoded recipient email
+  const handleContactFormSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError('');
+    setSubmitSuccess(false);
+
+    // Basic validation
+    if (!contactForm.name || !contactForm.phone) {
+      setSubmitError('Please fill in all required fields (Name and Phone Number)');
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Phone number validation
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    if (!phoneRegex.test(contactForm.phone.replace(/\s/g, ''))) {
+      setSubmitError('Please enter a valid phone number');
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      // Load EmailJS library
+      const emailjs = await loadEmailJS();
+      
+
+const templateParams = {
+  name: contactForm.name,
+  phone: contactForm.phone,
+  email: contactForm.email || 'Not provided',
+  city: contactForm.city || 'Not provided',
+  service: contactForm.service || 'Not specified',
+  details: contactForm.details || 'No additional details provided',
+};
+
+
+      console.log('Sending email with params:', templateParams);
+
+      // Send email using your EmailJS credentials
+      const result = await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        EMAILJS_PUBLIC_KEY
+      );
+
+      console.log('Email sent successfully:', result);
+      setSubmitSuccess(true);
+      
+      // Clear form
+      setContactForm({
+        name: '',
+        phone: '',
+        email: '',
+        city: '',
+        service: '',
+        details: '',
+      });
+
+      // Auto-hide success message after 5 seconds
+      setTimeout(() => {
+        setSubmitSuccess(false);
+      }, 5000);
+
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      setSubmitError(`Failed to send message: ${error.text || error.message || 'Please try again or contact us directly.'}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const siteConfig = {
     logo: "CHINMUDRA",
@@ -350,7 +504,6 @@ const ChinmudraWebsite = () => {
         city: "Hyderabad",
         address: "123, Tech City, Madhapur, Hyderabad, Telangana - 500081"
       },
-      
     ],
     contact: {
       phone: "+91 98765 43210",
@@ -762,7 +915,7 @@ const ChinmudraWebsite = () => {
           </div>
         </section>
 
-        {/* Enhanced Contact Section */}
+        {/* Enhanced Contact Section with Working EmailJS Form */}
         <section id="contact" data-animate className="py-20 bg-gradient-to-br from-gray-900 via-green-900 to-emerald-900 text-white relative overflow-hidden scroll-mt-20">
           <div className="absolute inset-0">
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-green-500/10 rounded-full blur-3xl"></div>
@@ -816,56 +969,91 @@ const ChinmudraWebsite = () => {
                         </div>
                       ))}
                     </div>
-                    
-                    {/* Service Coverage */}
-                    {/* <div className="mt-6 p-4 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-xl border border-green-400/30">
-                      <p className="text-green-200 font-medium mb-2">📍 Pan-India Service Coverage</p>
-                      <p className="text-gray-300 text-sm">
-                        We provide installation and support services across major metropolitan cities and tier-2 cities. 
-                        Remote consultation and support available nationwide.
-                      </p>
-                    </div> */}
                   </div>
                 </div>
                 
+                {/* Working EmailJS Contact Form */}
                 <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
                   <h3 className="text-2xl font-bold mb-6">Get Your Free Home Automation Consultation</h3>
-                  <div className="space-y-6">
+                  
+                  {/* Success Message */}
+                  {submitSuccess && (
+                    <div className="mb-6 p-4 bg-green-500/20 border border-green-400/50 rounded-xl">
+                      <div className="flex items-center space-x-2">
+                        <CheckCircle className="w-5 h-5 text-green-400" />
+                        <p className="text-green-200 font-medium">
+                          Thank you! We received your inquiry and will contact you within 24 hours.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Error Message */}
+                  {submitError && (
+                    <div className="mb-6 p-4 bg-red-500/20 border border-red-400/50 rounded-xl">
+                      <p className="text-red-200">{submitError}</p>
+                    </div>
+                  )}
+                  
+                  <form onSubmit={handleContactFormSubmit} className="space-y-6">
                     <div>
                       <label className="block text-sm font-medium mb-2">Full Name *</label>
                       <input
                         type="text"
+                        name="name"
+                        value={contactForm.name}
+                        onChange={handleContactFormChange}
                         className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all duration-300"
                         placeholder="Enter your full name"
+                        required
                       />
                     </div>
+                    
                     <div>
                       <label className="block text-sm font-medium mb-2">Phone Number *</label>
                       <input
                         type="tel"
+                        name="phone"
+                        value={contactForm.phone}
+                        onChange={handleContactFormChange}
                         className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all duration-300"
                         placeholder="+91 XXXXX XXXXX"
+                        required
                       />
                     </div>
+                    
                     <div>
                       <label className="block text-sm font-medium mb-2">Email Address</label>
                       <input
                         type="email"
+                        name="email"
+                        value={contactForm.email}
+                        onChange={handleContactFormChange}
                         className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all duration-300"
                         placeholder="your@email.com"
                       />
                     </div>
+                    
                     <div>
                       <label className="block text-sm font-medium mb-2">City</label>
                       <input
                         type="text"
+                        name="city"
+                        value={contactForm.city}
+                        onChange={handleContactFormChange}
                         className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all duration-300"
                         placeholder="Your city"
                       />
                     </div>
+                    
                     <div>
                       <label className="block text-sm font-medium mb-2">Services Interested In</label>
-                      <select className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all duration-300">
+                      <select 
+                        name="service"
+                        value={contactForm.service}
+                        onChange={handleContactFormChange}
+                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all duration-300"
+                      >
                         <option value="" className="text-gray-800">Select a service</option>
                         <option value="complete-automation" className="text-gray-800">Complete Home Automation</option>
                         <option value="entertainment" className="text-gray-800">Entertainment Systems</option>
@@ -876,38 +1064,55 @@ const ChinmudraWebsite = () => {
                         <option value="custom" className="text-gray-800">Custom Solution</option>
                       </select>
                     </div>
+                    
                     <div>
                       <label className="block text-sm font-medium mb-2">Project Details</label>
                       <textarea
+                        name="details"
+                        value={contactForm.details}
+                        onChange={handleContactFormChange}
                         rows={4}
                         className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all duration-300"
                         placeholder="Tell us about your home automation requirements, property type, budget range, and timeline..."
                       ></textarea>
                     </div>
-                    <button
-                      onClick={() => alert('Thank you for your interest in Chinmudra Innovations! Our automation experts will contact you within 24 hours to discuss your smart home requirements and provide a customized solution.')}
-                      className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-4 rounded-xl font-bold text-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2"
-                    >
-                      <span>Get Free Consultation</span>
-                      <ArrowRight className="w-5 h-5" />
-                    </button>
                     
-                    <p className="text-center text-sm text-gray-300 mt-4">
-                      💡 Free site visit and consultation • 🔒 100% privacy guaranteed • ⚡ Quick response within 24 hours
-                    </p>
-                  </div>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center space-x-2 transition-all duration-300 ${
+                        isSubmitting 
+                          ? 'bg-gray-600 cursor-not-allowed' 
+                          : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 hover:shadow-2xl transform hover:scale-105'
+                      }`}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                          <span>Sending Email...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Get Free Consultation</span>
+                          <ArrowRight className="w-5 h-5" />
+                        </>
+                      )}
+                    </button>
+                  </form>
+                  
+                  <p className="text-center text-sm text-gray-300 mt-4">
+                    Free site visit and consultation • 100% privacy guaranteed • Quick response within 24 hours
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-     <Footer/>
-
+        <Footer />
       </div>
     </div>
   );
 };
 
 export default ChinmudraWebsite;
-                      
